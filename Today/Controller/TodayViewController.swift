@@ -45,11 +45,9 @@ class TodayViewController: UITableViewController {
         alert.addTextField { alertTextField in
             alertTextField.placeholder = "Creat item"
         }
-        
-        
-        
         self.present(alert, animated: true, completion: nil)
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
@@ -69,8 +67,6 @@ class TodayViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-//        context.delete(itemArray[indexPath.row])
-//        itemArray.remove(at: indexPath.row)
         
         saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
@@ -111,17 +107,9 @@ class TodayViewController: UITableViewController {
 
 extension TodayViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         if let searchText = searchBar.text {
-            
-//            let request: NSFetchRequest<Item> = Item.fetchRequest()
-//            request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchText)
-//            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-            
             loadItems(text: searchText)
-            
             tableView.reloadData()
-            
         }
     }
     
