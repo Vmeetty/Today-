@@ -16,7 +16,7 @@ class TodayViewController: UITableViewController {
             loadItems()
         }
     }
-        
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
@@ -110,7 +110,6 @@ extension TodayViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
             loadItems(text: searchText)
-//            tableView.reloadData()
         }
     }
     
@@ -127,9 +126,13 @@ extension TodayViewController: UISearchBarDelegate {
 }
 
 extension TodayViewController: ItemTableViewCellDelegate {
-    func setToSeriousWith(_ title: String) {
-        print(title)
+    
+    func setToSerious(_ cell: ItemTableViewCell) -> UIImage? {
+        var image = ""
+        image = cell.starButton.imageView?.image == UIImage(systemName: "star") ? "star.fill" : "star"
+        return UIImage(systemName: image)
     }
+    
 }
 
 

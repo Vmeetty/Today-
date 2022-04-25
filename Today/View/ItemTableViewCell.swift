@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ItemTableViewCellDelegate {
-    func setToSeriousWith(_ title: String)
+    func setToSerious(_ cell: ItemTableViewCell) -> UIImage?
 }
 
 class ItemTableViewCell: UITableViewCell {
@@ -26,7 +26,8 @@ class ItemTableViewCell: UITableViewCell {
 
     
     @IBAction func starButtonPressed(_ sender: UIButton) {
-        delegate?.setToSeriousWith(sender.titleLabel?.text ?? "Button doesn't have a title")
+        let image = delegate?.setToSerious(self)
+        starButton.setImage(image, for: .normal)
     }
     
 }
