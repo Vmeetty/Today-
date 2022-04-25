@@ -8,11 +8,13 @@
 
 struct K {
     
-    static var tableVieweCellID = "TodayReuseCell"
-    static var todoListArrayID  = "TodoListArray"
-    static var goToItemsSegue   = "goToItems"
-    static var categoryCellID   = "categoryCell"
-    static var nibCellName      = "ItemTableViewCell"
-    static var nibCellID        = "nibCellID"
+    static var tableVieweCellID  = "TodayReuseCell"
+    static var todoListArrayID   = "TodoListArray"
+    static var goToItemsSegue    = "goToItems"
+    static var categoryCellID    = "categoryCell"
+    static var nibCellName       = "ItemTableViewCell"
+    static var nibCellID         = "nibCellID"
+    static var seriousItemsSegue = "goToSeriousItems"
+    static var seriousCellID     = "seriousTableViewCell"
 }
 

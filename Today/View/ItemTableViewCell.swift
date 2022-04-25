@@ -8,12 +8,13 @@
 import UIKit
 
 protocol ItemTableViewCellDelegate {
-    func setToSerious(_ cell: ItemTableViewCell) -> UIImage?
+    func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath)
 }
 
 class ItemTableViewCell: UITableViewCell {
     
     var delegate: ItemTableViewCellDelegate?
+    var indexPathForStar: IndexPath?
 
     @IBOutlet weak var textItemLabel: UILabel!
     @IBOutlet weak var bubbleView: UIView!
@@ -26,8 +27,9 @@ class ItemTableViewCell: UITableViewCell {
 
     
     @IBAction func starButtonPressed(_ sender: UIButton) {
-        let image = delegate?.setToSerious(self)
-        starButton.setImage(image, for: .normal)
+        delegate?.setToSerious(self, didSelectStarButtonAt: indexPathForStar!)
+//        starButton.setImage(image, for: .normal)
+        print("starButtonPressed ->")
     }
     
 }

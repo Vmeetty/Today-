@@ -19,11 +19,9 @@ class TodayViewController: UITableViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: K.nibCellName, bundle: nil), forCellReuseIdentifier: K.nibCellID)
-        
     }
     
     @IBAction func addItemPressed(_ sender: UIBarButtonItem) {
@@ -58,16 +56,19 @@ class TodayViewController: UITableViewController {
         cell.textItemLabel.text = itemArray[indexPath.row].title
         let doneStatus = itemArray[indexPath.row].done
         cell.accessoryType = doneStatus ? .checkmark : .none
-        cell.delegate = self
+        cell.indexPathForStar = indexPath
         
+        let serious = itemArray[indexPath.row].serious
+        let image = serious ? "star.fill" : "star"
+        cell.starButton.setImage(UIImage(systemName: image), for: .normal)
+        cell.delegate = self
+        print(itemArray[indexPath.row].serious)
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        
         saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -127,11 +128,11 @@ extension TodayViewController: UISearchBarDelegate {
 
 extension TodayViewController: ItemTableViewCellDelegate {
     
-    func setToSerious(_ cell: ItemTableViewCell) -> UIImage? {
-        var image = ""
-        image = cell.starButton.imageView?.image == UIImage(systemName: "star") ? "star.fill" : "star"
-        return UIImage(systemName: image)
+    func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath) {
+        itemArray[indexPath.row].serious = !itemArray[indexPath.row].serious
+        saveItems()
     }
+
     
 }
 

@@ -7,6 +7,35 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Serious Table View Controller-->
+        <scene sceneID="4ys-xv-xvQ">
+            <objects>
+                <tableViewController id="6Bs-ao-c5g" customClass="SeriousTableViewController" customModule="Today" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Xd8-60-gKk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="seriousTableViewCell" id="gq9-Od-wIC">
+                                <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gq9-Od-wIC" id="yGy-qw-VyC">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="6Bs-ao-c5g" id="0iY-lf-aJL"/>
+                            <outlet property="delegate" destination="6Bs-ao-c5g" id="2N8-we-UiB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="isC-l3-5so"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cCy-FH-RKI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="812" y="-633"/>
+        </scene>
         <!--Items-->
         <scene sceneID="HDP-M2-W4b">
             <objects>
@@ -24,7 +53,7 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="43" id="LIG-0Z-SXj">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TodayReuseCell" rowHeight="43" id="LIG-0Z-SXj">
                                 <rect key="frame" x="0.0" y="88.5" width="414" height="43"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LIG-0Z-SXj" id="aCj-ag-dIc">
@@ -49,7 +78,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K52-WW-UAe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="755.07246376811599" y="44.866071428571423"/>
+            <point key="canvasLocation" x="816" y="45"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DO3-rP-rjk">
@@ -111,6 +140,9 @@
                             </barButtonItem>
                             <barButtonItem image="star.square.fill" catalog="system" id="d5p-PK-ZkQ">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <segue destination="6Bs-ao-c5g" kind="show" identifier="goToSeriousItems" id="l1P-Dg-3TH"/>
+                                </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
