@@ -101,6 +101,7 @@ class TodayViewController: UITableViewController {
         } catch {
             print("Error of fetching request \(error)")
         }
+        tableView.reloadData()
     }
     
 }
@@ -109,7 +110,7 @@ extension TodayViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
             loadItems(text: searchText)
-            tableView.reloadData()
+//            tableView.reloadData()
         }
     }
     
