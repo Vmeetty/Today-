@@ -12,6 +12,7 @@ struct K {
     static var todoListArrayID  = "TodoListArray"
     static var goToItemsSegue   = "goToItems"
     static var categoryCellID   = "categoryCell"
-    
+    static var nibCellName      = "ItemTableViewCell"
+    static var nibCellID        = "nibCellID"
 }
 

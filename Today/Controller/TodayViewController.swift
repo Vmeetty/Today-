@@ -22,6 +22,7 @@ class TodayViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(UINib(nibName: K.nibCellName, bundle: nil), forCellReuseIdentifier: K.nibCellID)
         
     }
     
@@ -53,12 +54,11 @@ class TodayViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.tableVieweCellID, for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        content.text = itemArray[indexPath.row].title
-        cell.contentConfiguration = content
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
+        cell.textItemLabel.text = itemArray[indexPath.row].title
         let doneStatus = itemArray[indexPath.row].done
         cell.accessoryType = doneStatus ? .checkmark : .none
+        cell.delegate = self
         
         
         return cell
@@ -123,6 +123,12 @@ extension TodayViewController: UISearchBarDelegate {
                 self.tableView.reloadData()
             }
         }
+    }
+}
+
+extension TodayViewController: ItemTableViewCellDelegate {
+    func setToSeriousWith(_ title: String) {
+        print(title)
     }
 }
 
