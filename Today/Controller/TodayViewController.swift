@@ -41,9 +41,8 @@ class TodayViewController: UITableViewController {
                 newItem.category = self.selectedCategory
                 self.itemArray.append(newItem)
                 
-                self.manager.saveItems {
-                    self.tableView.reloadData()
-                }
+                self.manager.saveItems()
+                self.tableView.reloadData()
             }
         }
         
@@ -79,9 +78,8 @@ class TodayViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        manager.saveItems {
-            tableView.reloadData()
-        }
+        manager.saveItems()
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
         
@@ -93,7 +91,7 @@ class TodayViewController: UITableViewController {
 extension TodayViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            manager.loadItemsWith(textFieldText: searchText)
+            manager.loadItemsWith(textFieldText: searchText, itemCategory: selectedCategory)
         }
     }
     
@@ -113,9 +111,8 @@ extension TodayViewController: ItemTableViewCellDelegate {
     
     func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath) {
         itemArray[indexPath.row].serious = !itemArray[indexPath.row].serious
-        manager.saveItems {
-            tableView.reloadData()
-        }
+        manager.saveItems()
+        tableView.reloadData()
     }
     
 }

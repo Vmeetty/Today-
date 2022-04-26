@@ -35,9 +35,8 @@ class CategoryTableViewController: UITableViewController {
                 newCategory.name = textFieldText
                 
                 self.categories.append(newCategory)
-                self.manager.saveItems {
-                    self.tableView.reloadData()
-                }
+                self.manager.saveItems()
+                self.tableView.reloadData()
                 
             }
         }
