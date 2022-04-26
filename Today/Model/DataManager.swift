@@ -9,39 +9,81 @@ import Foundation
 import CoreData
 import UIKit
 
+protocol DataManagerDelegate {
+    func didLoadedItemsWith(fetchResult: [Item])
+}
+
 
 class DataManager {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    var delegate: DataManagerDelegate?
+    
     static let shared = DataManager()
     
-    func saveItemsFrom(tableView: UITableView, complition: () -> Void) {
+    
+    func saveItems(complition: () -> Void) {
         do {
             try context.save()
             print("saved in CoreData")
         } catch {
             print("Error saving context: \(error)")
         }
-//        tableView.reloadData() // в комплишене перезагрузить таблицу
+        complition()
+    }
+    
+    func saveItems() {
+        do {
+            try context.save()
+            print("saved in CoreData")
+        } catch {
+            print("Error saving context: \(error)")
+        }
     }
     
     
-    
-    func loadSeriousItems(complition: ([Item]?) -> Void) {
-        
+    func loadItemsWith(_ predicate: NSPredicate? = nil, textFieldText: String? = nil, itemCategory: Category? = nil) {
+
         let request: NSFetchRequest<Item> = Item.fetchRequest()
+        var finalPredicate = NSPredicate()
+        
         var fetchResult = [Item]()
-        var predicate = NSPredicate()
-        predicate = NSPredicate(format: "serious = true")
-        request.predicate = predicate
+        
+        let sort = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        if predicate != nil {
+           finalPredicate = predicate!
+        } else if textFieldText != nil && itemCategory != nil {
+            finalPredicate = NSPredicate(format: "category.name MATCHES %@ AND title CONTAINS[cd] %@",
+                                         argumentArray: [itemCategory!.name!, textFieldText!])
+            request.sortDescriptors = sort
+        } else if itemCategory != nil {
+            finalPredicate = NSPredicate(format: "category.name MATCHES %@", itemCategory!.name!)
+        } else if textFieldText != nil {
+            finalPredicate = NSPredicate(format: "title CONTAINS[cd] %@", textFieldText!)
+            request.sortDescriptors = sort
+        }
+    
+        request.predicate = finalPredicate
+        
         do {
             fetchResult = try context.fetch(request)
         } catch {
             print("Error of fetching request \(error)")
         }
-        complition(fetchResult)
-//        tableView.reloadData()
+        delegate?.didLoadedItemsWith(fetchResult: fetchResult)
+    }
+    
+    func loadCategories(complion: ([Category]) -> Void) {
+        let request: NSFetchRequest<Category> = Category.fetchRequest()
+        var fetchResult = [Category]()
+        do {
+            fetchResult = try context.fetch(request)
+        } catch {
+            print("Fetching context failed: \(error)")
+        }
+        complion(fetchResult)
     }
     
 }

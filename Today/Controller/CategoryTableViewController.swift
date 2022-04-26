@@ -13,11 +13,14 @@ class CategoryTableViewController: UITableViewController {
     var categories = [Category]()
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var manager = DataManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadCategories()
+        manager.loadCategories { categories in
+            self.categories = categories
+        }
         
     }
 
@@ -32,8 +35,10 @@ class CategoryTableViewController: UITableViewController {
                 newCategory.name = textFieldText
                 
                 self.categories.append(newCategory)
-                self.saveCategory()
-                self.tableView.reloadData()
+                self.manager.saveItems {
+                    self.tableView.reloadData()
+                }
+                
             }
         }
         alert.addAction(action)
@@ -64,23 +69,6 @@ class CategoryTableViewController: UITableViewController {
         if let indexPath = tableView.indexPathForSelectedRow {
             let destinationVC = segue.destination as! TodayViewController
             destinationVC.selectedCategory = categories[indexPath.row]
-        }
-    }
-    
-    func saveCategory() {
-        do {
-            try context.save()
-        } catch {
-           print("Saving context failed: \(error)")
-        }
-        tableView.reloadData()
-    }
-    
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categories = try context.fetch(request)
-        } catch {
-            print("Fetching context failed: \(error)")
         }
     }
     

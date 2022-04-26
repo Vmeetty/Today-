@@ -28,8 +28,6 @@ class ItemTableViewCell: UITableViewCell {
     
     @IBAction func starButtonPressed(_ sender: UIButton) {
         delegate?.setToSerious(self, didSelectStarButtonAt: indexPathForStar!)
-//        starButton.setImage(image, for: .normal)
-        print("starButtonPressed ->")
     }
     
 }
