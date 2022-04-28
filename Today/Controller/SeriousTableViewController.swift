@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class SeriousTableViewController: UITableViewController {
+class SeriousTableViewController: SwipeViewController {
     
     let realm = try! Realm()
     var itemArray: Results<Item>?
@@ -46,6 +46,7 @@ class SeriousTableViewController: UITableViewController {
             let serious = item.serious
             let image = serious ? "star.fill" : "star"
             cell.starButton.setImage(UIImage(systemName: image), for: .normal)
+            cell.itemCellDelegate = self
             cell.delegate = self
         } else {
             cell.textItemLabel.text = "No serious ites yet"
@@ -58,6 +59,19 @@ class SeriousTableViewController: UITableViewController {
         manager.updateDoneStatus(item: itemArray?[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
+    }
+    
+//MARK: - Deleting section
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = itemArray?[indexPath.row] {
+            do {
+                try realm.write({
+                    realm.delete(item)
+                })
+            } catch {
+                print("Error of deleting item: \(error)")
+            }
+        }
     }
   
 }

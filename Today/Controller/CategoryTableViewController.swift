@@ -9,11 +9,10 @@ import UIKit
 import RealmSwift
 import SwipeCellKit
 
-class CategoryTableViewController: UITableViewController {
+class CategoryTableViewController: SwipeViewController {
     
     let realm = try! Realm()
     var categories: Results<Category>?
-
     var manager = DataManager()
     
     override func viewDidLoad() {
@@ -53,13 +52,11 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.categoryCellID, for: indexPath) as! SwipeTableViewCell
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         var content = cell.defaultContentConfiguration()
         content.text = categories?[indexPath.row].name ?? "No categories yet"
         cell.contentConfiguration = content
-        
-        cell.delegate = self
-        
+     
         return cell
     }
     
@@ -74,33 +71,17 @@ class CategoryTableViewController: UITableViewController {
         }
     }
     
-}
-
-extension CategoryTableViewController: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            if let category = self.categories?[indexPath.row] {
-                do {
-                    try self.realm.write({
-                        self.realm.delete(category)
-                    })
-                } catch {
-                    print("Error of deliting realm object: \(error)")
-                }
+    override func updateModel(at indexPath: IndexPath) {
+        if let category = categories?[indexPath.row] {
+            do {
+                try realm.write({
+                    realm.delete(category)
+                })
+            } catch {
+                print("Error of deliting realm object: \(error)")
             }
         }
-
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete-icon")
-
-        return [deleteAction]
     }
     
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
-        options.expansionStyle = .destructive
-        return options
-    }
 }
+

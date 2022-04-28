@@ -7,11 +7,11 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
-class TodayViewController: UITableViewController {
+class TodayViewController: SwipeViewController {
     
     let realm = try! Realm()
-    
     var toDoResultes: Results<Item>?
     var manager = DataManager()
     
@@ -51,7 +51,6 @@ class TodayViewController: UITableViewController {
                 }
                 
                 self.tableView.reloadData()
-                
             }
         }
         
@@ -74,13 +73,13 @@ class TodayViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
         if let item = toDoResultes?[indexPath.row] {
             cell.textItemLabel.text = item.title
+            cell.indexPathForStar = indexPath
             let doneStatus = item.done
             cell.accessoryType = doneStatus ? .checkmark : .none
-            cell.indexPathForStar = indexPath
-            
             let serious = item.serious
             let image = serious ? "star.fill" : "star"
             cell.starButton.setImage(UIImage(systemName: image), for: .normal)
+            cell.itemCellDelegate = self
             cell.delegate = self
         } else {
             cell.textItemLabel.text = "No items yet"
@@ -93,6 +92,19 @@ class TodayViewController: UITableViewController {
         manager.updateDoneStatus(item: toDoResultes?[indexPath.row])
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //MARK: - Deleting section
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = toDoResultes?[indexPath.row] {
+            do {
+                try realm.write({
+                    realm.delete(item)
+                })
+            } catch {
+                print("Error of deleting item: \(error)")
+            }
+        }
     }
         
 }

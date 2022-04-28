@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import SwipeCellKit
 
 protocol ItemTableViewCellDelegate {
     func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath)
 }
 
-class ItemTableViewCell: UITableViewCell {
+class ItemTableViewCell: SwipeTableViewCell {
     
-    var delegate: ItemTableViewCellDelegate?
+    var itemCellDelegate: ItemTableViewCellDelegate?
     var indexPathForStar: IndexPath?
 
     @IBOutlet weak var textItemLabel: UILabel!
@@ -23,11 +24,13 @@ class ItemTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
     }
 
     
     @IBAction func starButtonPressed(_ sender: UIButton) {
-        delegate?.setToSerious(self, didSelectStarButtonAt: indexPathForStar!)
+        itemCellDelegate?.setToSerious(self, didSelectStarButtonAt: indexPathForStar!)
     }
     
+            
 }
