@@ -19,9 +19,7 @@ class DataManager {
     let realm = try! Realm()
     
     var delegate: DataManagerDelegate?
-    
-    static let shared = DataManager()
-    
+        
     
     func saveItems(realmObjectClass: Object) {
         do {
@@ -72,8 +70,30 @@ class DataManager {
         if let results = results {
             delegate?.didLoadedItemsWith(fetchResult: results)
         }
+    }
+    
+    func loadCategories(categoty: Category.Type, complion: (Results<Category>) -> Void) {
         
+        let categories = realm.objects(categoty)
+        complion(categories)
         
+    }
+    
+    func filterItemsBy(_ itemsResults: Results<Item>?, with text: String) -> Results<Item>? {
+        var results: Results<Item>?
+        if let items = itemsResults {
+            results = items.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "title", ascending: true)
+        }
+        
+        return results
+    }
+    
+}
+
+
+
+
+
 //        let request: NSFetchRequest<Item> = Item.fetchRequest()
 //        var finalPredicate = NSPredicate()
 //
@@ -102,23 +122,3 @@ class DataManager {
 //            print("Error of fetching request \(error)")
 //        }
 //        delegate?.didLoadedItemsWith(fetchResult: fetchResult)
-    }
-    
-    func loadCategories(categoty: Category.Type, complion: (Results<Category>) -> Void) {
-        
-        let categories = realm.objects(categoty)
-        complion(categories)
-        
-    }
-    
-    func filterItemsBy(_ itemsResults: Results<Item>?, with text: String) -> Results<Item>? {
-        var results: Results<Item>?
-        if let items = itemsResults {
-            results = items.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "title", ascending: true)
-        }
-        
-        return results
-    }
-    
-}
-

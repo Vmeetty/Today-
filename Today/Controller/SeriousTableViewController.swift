@@ -58,8 +58,6 @@ class SeriousTableViewController: UITableViewController {
         manager.updateDoneStatus(item: itemArray?[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
-//        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-//        manager.saveItems()
     }
   
 }
@@ -70,8 +68,6 @@ extension SeriousTableViewController: ItemTableViewCellDelegate {
     func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath) {
         manager.updateSeriousStatus(item: itemArray?[indexPath.row])
         tableView.reloadData()
-//        itemArray[indexPath.row].serious = !itemArray[indexPath.row].serious
-//        manager.saveItems()
     }
 }
 

@@ -93,8 +93,6 @@ class TodayViewController: UITableViewController {
         manager.updateDoneStatus(item: toDoResultes?[indexPath.row])
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
-//        toDoResultes[indexPath.row].done = !toDoResultes[indexPath.row].done
-//        manager.saveItems()
     }
         
 }
@@ -127,8 +125,6 @@ extension TodayViewController: ItemTableViewCellDelegate {
     func setToSerious(_ cell: ItemTableViewCell, didSelectStarButtonAt indexPath: IndexPath) {
         manager.updateSeriousStatus(item: toDoResultes?[indexPath.row])
         tableView.reloadData()
-//        toDoResultes[indexPath.row].serious = !toDoResultes[indexPath.row].serious
-//        manager.saveItems()
     }
     
 }
