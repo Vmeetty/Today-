@@ -6,20 +6,20 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
     
-    var categories = [Category]()
+    let realm = try! Realm()
+    var categories: Results<Category>?
 
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var manager = DataManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        manager.loadCategories { categories in
-            self.categories = categories
+        manager.loadCategories(categoty: Category.self) { results in
+            categories = results
         }
         
     }
@@ -31,11 +31,10 @@ class CategoryTableViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { alertAction in
             if let textFieldText = alert.textFields![0].text {
-                let newCategory = Category(context: self.context)
+                let newCategory = Category()
                 newCategory.name = textFieldText
                 
-                self.categories.append(newCategory)
-                self.manager.saveItems()
+                self.manager.saveItems(realmObjectClass: newCategory)
                 self.tableView.reloadData()
                 
             }
@@ -48,13 +47,13 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.categoryCellID, for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = categories[indexPath.row].name
+        content.text = categories?[indexPath.row].name ?? "No categories yet"
         cell.contentConfiguration = content
         
         return cell
@@ -67,7 +66,7 @@ class CategoryTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let indexPath = tableView.indexPathForSelectedRow {
             let destinationVC = segue.destination as! TodayViewController
-            destinationVC.selectedCategory = categories[indexPath.row]
+            destinationVC.selectedCategory = categories?[indexPath.row]
         }
     }
     

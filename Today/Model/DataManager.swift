@@ -6,84 +6,109 @@
 //
 
 import Foundation
-import CoreData
+import RealmSwift
 import UIKit
 
 protocol DataManagerDelegate {
-    func didLoadedItemsWith(fetchResult: [Item])
+    func didLoadedItemsWith(fetchResult: Results<Item>)
 }
 
 
 class DataManager {
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
     var delegate: DataManagerDelegate?
     
     static let shared = DataManager()
     
     
-    func saveItems(complition: () -> Void) {
+    func saveItems(realmObjectClass: Object) {
         do {
-            try context.save()
-            print("saved in CoreData")
+            try realm.write({
+                realm.add(realmObjectClass)
+            })
         } catch {
-            print("Error saving context: \(error)")
-        }
-        complition()
-    }
-    
-    func saveItems() {
-        do {
-            try context.save()
-            print("saved in CoreData")
-        } catch {
-            print("Error saving context: \(error)")
+            print("Error of write new realm object: \(error)")
         }
     }
     
+    func updateDoneStatus(item: Item?) {
+        if let item = item {
+            do {
+                try realm.write({
+                    item.done = !item.done
+                })
+            } catch {
+                print("Fail to update done property realm: \(error)")
+            }
+        }
+    }
     
-    func loadItemsWith(_ predicate: NSPredicate? = nil, textFieldText: String? = nil, itemCategory: Category? = nil) {
+    func updateSeriousStatus(item: Item?) {
+        if let item = item {
+            do {
+                try realm.write({
+                    item.serious = !item.serious
+                })
+            } catch {
+                print("Fail to update serious property realm: \(error)")
+            }
+        }
+    }
+    
+    
+    func loadItemsWith(item: Item.Type, predicate: NSPredicate? = nil, textFieldText: String? = nil, itemCategory: Category? = nil) {
 
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        var finalPredicate = NSPredicate()
-        
-        var fetchResult = [Item]()
-        
-        let sort = [NSSortDescriptor(key: "title", ascending: true)]
-        
-        if predicate != nil {
-           finalPredicate = predicate!
-        } else if textFieldText != nil && itemCategory != nil {
-            finalPredicate = NSPredicate(format: "category.name MATCHES %@ AND title CONTAINS[cd] %@",
-                                         argumentArray: [itemCategory!.name!, textFieldText!])
-            request.sortDescriptors = sort
-        } else if itemCategory != nil {
-            finalPredicate = NSPredicate(format: "category.name MATCHES %@", itemCategory!.name!)
-        } else if textFieldText != nil {
-            finalPredicate = NSPredicate(format: "title CONTAINS[cd] %@", textFieldText!)
-            request.sortDescriptors = sort
+        var results: Results<Item>?
+        if let selectedCategory = itemCategory {
+            results = selectedCategory.items.sorted(byKeyPath: "title", ascending: true)
+        } else {
+            let allItems = realm.objects(item)
+            results = allItems.where({
+                $0.serious == true
+            })
         }
-    
-        request.predicate = finalPredicate
-        
-        do {
-            fetchResult = try context.fetch(request)
-        } catch {
-            print("Error of fetching request \(error)")
+        if let results = results {
+            delegate?.didLoadedItemsWith(fetchResult: results)
         }
-        delegate?.didLoadedItemsWith(fetchResult: fetchResult)
+        
+        
+//        let request: NSFetchRequest<Item> = Item.fetchRequest()
+//        var finalPredicate = NSPredicate()
+//
+//        var fetchResult = [Item]()
+//
+//        let sort = [NSSortDescriptor(key: "title", ascending: true)]
+//
+//        if predicate != nil {
+//           finalPredicate = predicate!
+//        } else if textFieldText != nil && itemCategory != nil {
+//            finalPredicate = NSPredicate(format: "category.name MATCHES %@ AND title CONTAINS[cd] %@",
+//                                         argumentArray: [itemCategory!.name!, textFieldText!])
+//            request.sortDescriptors = sort
+//        } else if itemCategory != nil {
+//            finalPredicate = NSPredicate(format: "category.name MATCHES %@", itemCategory!.name!)
+//        } else if textFieldText != nil {
+//            finalPredicate = NSPredicate(format: "title CONTAINS[cd] %@", textFieldText!)
+//            request.sortDescriptors = sort
+//        }
+//
+//        request.predicate = finalPredicate
+//
+//        do {
+//            fetchResult = try context.fetch(request)
+//        } catch {
+//            print("Error of fetching request \(error)")
+//        }
+//        delegate?.didLoadedItemsWith(fetchResult: fetchResult)
     }
     
-    func loadCategories(complion: ([Category]) -> Void) {
-        let request: NSFetchRequest<Category> = Category.fetchRequest()
-        var fetchResult = [Category]()
-        do {
-            fetchResult = try context.fetch(request)
-        } catch {
-            print("Fetching context failed: \(error)")
-        }
-        complion(fetchResult)
+    func loadCategories(categoty: Category.Type, complion: (Results<Category>) -> Void) {
+        
+        let categories = realm.objects(categoty)
+        complion(categories)
+        
     }
     
 }
