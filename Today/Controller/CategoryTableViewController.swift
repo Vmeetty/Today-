@@ -17,7 +17,7 @@ class CategoryTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print(realm.configuration.fileURL)
         manager.loadCategories(categoty: Category.self) { results in
             categories = results
         }

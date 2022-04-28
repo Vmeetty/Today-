@@ -42,6 +42,7 @@ class TodayViewController: UITableViewController {
                         try self.realm.write({
                             let newItem = Item()
                             newItem.title = textItem
+                            newItem.dateCreated = Date()
                             category.items.append(newItem)
                         })
                     } catch {
@@ -104,7 +105,8 @@ class TodayViewController: UITableViewController {
 extension TodayViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            manager.loadItemsWith(item: Item.self, textFieldText: searchText, itemCategory: selectedCategory)
+            toDoResultes = manager.filterItemsBy(toDoResultes, with: searchText)
+            tableView.reloadData()
         }
     }
     

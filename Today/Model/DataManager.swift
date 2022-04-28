@@ -62,7 +62,7 @@ class DataManager {
 
         var results: Results<Item>?
         if let selectedCategory = itemCategory {
-            results = selectedCategory.items.sorted(byKeyPath: "title", ascending: true)
+            results = selectedCategory.items.sorted(byKeyPath: "dateCreated", ascending: true)
         } else {
             let allItems = realm.objects(item)
             results = allItems.where({
@@ -109,6 +109,15 @@ class DataManager {
         let categories = realm.objects(categoty)
         complion(categories)
         
+    }
+    
+    func filterItemsBy(_ itemsResults: Results<Item>?, with text: String) -> Results<Item>? {
+        var results: Results<Item>?
+        if let items = itemsResults {
+            results = items.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "title", ascending: true)
+        }
+        
+        return results
     }
     
 }
