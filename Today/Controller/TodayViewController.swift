@@ -15,6 +15,8 @@ class TodayViewController: SwipeViewController {
     let realm = try! Realm()
     var toDoResultes: Results<Item>?
     var manager = DataManager()
+    var uiManager = UIManager()
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory: Category? {
         didSet {
@@ -29,7 +31,22 @@ class TodayViewController: SwipeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: K.nibCellName, bundle: nil), forCellReuseIdentifier: K.nibCellID)
-        tableView.separatorStyle = .none
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let hexColor = selectedCategory?.color {
+            guard let navBar = navigationController?.navigationBar else {fatalError("navigation controller does not exist")}
+            title = selectedCategory!.name
+            if let color = UIColor(hexString: hexColor) {
+                navBar.backgroundColor = color
+                searchBar.barTintColor = color
+                let contastTextColor = ContrastColorOf(color, returnFlat: true)
+                navBar.standardAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: contastTextColor]
+                navBar.tintColor = contastTextColor
+            }
+        }
     }
     
 //MARK: - Create new item
@@ -71,27 +88,14 @@ class TodayViewController: SwipeViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
-        if let item = toDoResultes?[indexPath.row] {
-            cell.textItemLabel.text = item.title
-            cell.indexPathForStar = indexPath
-            let doneStatus = item.done
-            cell.accessoryType = doneStatus ? .checkmark : .none
-            let serious = item.serious
-            let image = serious ? "star.fill" : "star"
-            cell.starButton.setImage(UIImage(systemName: image), for: .normal)
-            let darkenColor = FlatWhite().darken(byPercentage: CGFloat(indexPath.row) / CGFloat(toDoResultes!.count))
-            cell.backgroundColor = darkenColor
-            cell.bubbleView.backgroundColor = darkenColor
-            let contrastColor = ContrastColorOf(darkenColor!, returnFlat: true)
-            cell.textItemLabel.textColor = contrastColor
-            cell.starButton.tintColor = contrastColor
-            
-            cell.itemCellDelegate = self
-            cell.delegate = self
-        } else {
-            cell.textItemLabel.text = "No items yet"
-        }
+       
+        var cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
+        let color = UIColor(hexString: selectedCategory!.color) ?? FlatWhite()
+        
+        cell = uiManager.settings(cell: cell, items: toDoResultes, indexPath: indexPath, color: color)
+        
+        cell.itemCellDelegate = self
+        cell.delegate = self
         
         return cell
     }

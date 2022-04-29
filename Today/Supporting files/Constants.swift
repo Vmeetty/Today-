@@ -16,5 +16,6 @@ struct K {
     static var nibCellID         = "nibCellID"
     static var seriousItemsSegue = "goToSeriousItems"
     static var seriousCellID     = "seriousTableViewCell"
+    static var hexColor          = "#E2E7E1"
 }
 

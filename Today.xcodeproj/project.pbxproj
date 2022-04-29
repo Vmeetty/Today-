@@ -18,6 +18,7 @@
 		CE7F150C28185C1500832D13 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F150B28185C1500832D13 /* Category.swift */; };
 		CE89DCDE2812D9A100222878 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE89DCDD2812D9A100222878 /* CategoryTableViewController.swift */; };
 		CEA77A2A281B009400226E3A /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA77A29281B009400226E3A /* SwipeViewController.swift */; };
+		CEA77A4C281C516100226E3A /* UIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA77A4B281C516100226E3A /* UIManager.swift */; };
 		CECA4429280C355E000D2FA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA4428280C355E000D2FA1 /* AppDelegate.swift */; };
 		CECA442B280C355E000D2FA1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA442A280C355E000D2FA1 /* SceneDelegate.swift */; };
 		CECA442D280C355E000D2FA1 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA442C280C355E000D2FA1 /* TodayViewController.swift */; };
@@ -37,6 +38,7 @@
 		CE7F150B28185C1500832D13 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		CE89DCDD2812D9A100222878 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		CEA77A29281B009400226E3A /* SwipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
+		CEA77A4B281C516100226E3A /* UIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIManager.swift; sourceTree = "<group>"; };
 		CECA4425280C355E000D2FA1 /* Today.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Today.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CECA4428280C355E000D2FA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CECA442A280C355E000D2FA1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				CE7F15002816DD8200832D13 /* DataManager.swift */,
+				CEA77A4B281C516100226E3A /* UIManager.swift */,
 				CE7F15092818533200832D13 /* Item.swift */,
 				CE7F150B28185C1500832D13 /* Category.swift */,
 			);
@@ -288,6 +291,7 @@
 				CEA77A2A281B009400226E3A /* SwipeViewController.swift in Sources */,
 				CE7F15012816DD8200832D13 /* DataManager.swift in Sources */,
 				CE89DCDE2812D9A100222878 /* CategoryTableViewController.swift in Sources */,
+				CEA77A4C281C516100226E3A /* UIManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

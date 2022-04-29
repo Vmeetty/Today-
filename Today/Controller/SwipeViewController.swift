@@ -7,6 +7,7 @@
 
 import UIKit
 import SwipeCellKit
+import ChameleonFramework
 
 class SwipeViewController: UITableViewController, SwipeTableViewCellDelegate {
     
@@ -14,9 +15,24 @@ class SwipeViewController: UITableViewController, SwipeTableViewCellDelegate {
         super.viewDidLoad()
         
         tableView.rowHeight = 70
-        
+        tableView.separatorStyle = .none
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let hexColor = UIColor(hexString: K.hexColor) {
+            guard let navBar = navigationController?.navigationBar else {
+                fatalError("Navigation controller not exist")
+            }
+            navBar.backgroundColor = hexColor
+            let contastTextColor = ContrastColorOf(hexColor, returnFlat: true)
+            navBar.standardAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: contastTextColor]
+            navBar.tintColor = contastTextColor
+        }
+    }
+    
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

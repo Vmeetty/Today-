@@ -23,7 +23,10 @@ class CategoryTableViewController: SwipeViewController {
             categories = results
         }
         
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
    
@@ -56,7 +59,11 @@ class CategoryTableViewController: SwipeViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         var content = cell.defaultContentConfiguration()
         content.text = categories?[indexPath.row].name ?? "No categories yet"
-        cell.backgroundColor = UIColor(hexString: categories?[indexPath.row].color ?? "#FFFFFF")
+        guard let hexColor = UIColor(hexString: categories![indexPath.row].color) else {
+            fatalError("have no hexcolor")
+        }
+        content.textProperties.color = ContrastColorOf(hexColor, returnFlat: true)
+        cell.backgroundColor = hexColor
         cell.contentConfiguration = content
      
         return cell
@@ -64,6 +71,7 @@ class CategoryTableViewController: SwipeViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: K.goToItemsSegue, sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

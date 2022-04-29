@@ -7,13 +7,14 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class SeriousTableViewController: SwipeViewController {
     
     let realm = try! Realm()
     var itemArray: Results<Item>?
     var manager = DataManager()
-    var predicate = NSPredicate(format: "serious = true")
+    var uiManager = UIManager()
     
 
     override func viewDidLoad() {
@@ -27,6 +28,11 @@ class SeriousTableViewController: SwipeViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = "Serious items"
+    }
+    
     
 
     // MARK: - Table view data source
@@ -36,21 +42,12 @@ class SeriousTableViewController: SwipeViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
-        if let item = itemArray?[indexPath.row] {
-            cell.textItemLabel.text = item.title
-            let doneStatus = item.done
-            cell.accessoryType = doneStatus ? .checkmark : .none
-            cell.indexPathForStar = indexPath
-            
-            let serious = item.serious
-            let image = serious ? "star.fill" : "star"
-            cell.starButton.setImage(UIImage(systemName: image), for: .normal)
-            cell.itemCellDelegate = self
-            cell.delegate = self
-        } else {
-            cell.textItemLabel.text = "No serious ites yet"
-        }
+        
+        var cell = tableView.dequeueReusableCell(withIdentifier: K.nibCellID, for: indexPath) as! ItemTableViewCell
+        cell = uiManager.settings(cell: cell, items: itemArray, indexPath: indexPath, color: FlatWhite())
+        
+        cell.itemCellDelegate = self
+        cell.delegate = self
             
         return cell
     }
