@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import SwipeCellKit
+import ChameleonFramework
 
 class TodayViewController: SwipeViewController {
     
@@ -28,7 +29,7 @@ class TodayViewController: SwipeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: K.nibCellName, bundle: nil), forCellReuseIdentifier: K.nibCellID)
-        
+        tableView.separatorStyle = .none
     }
     
 //MARK: - Create new item
@@ -79,6 +80,13 @@ class TodayViewController: SwipeViewController {
             let serious = item.serious
             let image = serious ? "star.fill" : "star"
             cell.starButton.setImage(UIImage(systemName: image), for: .normal)
+            let darkenColor = FlatWhite().darken(byPercentage: CGFloat(indexPath.row) / CGFloat(toDoResultes!.count))
+            cell.backgroundColor = darkenColor
+            cell.bubbleView.backgroundColor = darkenColor
+            let contrastColor = ContrastColorOf(darkenColor!, returnFlat: true)
+            cell.textItemLabel.textColor = contrastColor
+            cell.starButton.tintColor = contrastColor
+            
             cell.itemCellDelegate = self
             cell.delegate = self
         } else {
